@@ -56,6 +56,7 @@ Download from github
 benötigt:  
 [skatstube.exe](https://github.com/jvr-ks/skatstube/raw/master/skatstube.exe)  
 [skatstube.ini](https://github.com/jvr-ks/skatstube/raw/master/skatstube.ini)  
+[alarm.mp3](https://github.com/jvr-ks/skatstube/raw/master/[alarm.mp3])  
   
 optional:  
 [skatstube1.txt](https://github.com/jvr-ks/skatstube/raw/master/skatstube1.txt)  
