@@ -37,10 +37,10 @@ Durch Auswahl eines Satzes im Menü per Klick, wird dieser in das Chatfeld einge
   
 Wird gleichzeitig die [Umschalt]-Taste gedrückt, kann der Satz stattdessen bearbeitet werden.  
   
-Die Sätze werden in den Datein "skatstube1(2,3).txt" (im gleichen Ordner) gespeichert.  
+Die Sätze werden in den Dateien "skatstube1(2,3).txt" (im gleichen Ordner) gespeichert.  
     
 Die Position des Chatfeldes wird einmalig Menü -> Koordinaten (3 Werte, abhängig von "Select set") neu erfasst,  
-und in der Datei Config-Datei gespeichert.   
+und in der Config-Datei gespeichert.   
 **Dazu muss der Startordner beschreibbar sein!**   
   
 ##### Besonderheiten:  
