@@ -24,7 +24,7 @@ Pause (1 min), noch: 40 s
 sowie eigenen Einfügekoordinaten: chatfield1(2,3)PosX und chatfield1(2,3)PosY  -> Config-Datei ("skatstube.ini")  
 (Menü: Koordinaten -> Eingabe-Koordinaten neu erfassen)  
   
-Umschaltung ~~im Menü über "Select Set" oder~~ per "Select Set" Tasten.  
+Umschaltung per "Select Set" Tasten.  
 Bei Umschaltung wird zusätzlich der Hintergrund eingefärbt.  
   
 * [Umschalt]-Taste ([Shift]-Taste) statt [Strg]-Taste ([Ctrl]-Taste)
