@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.065"
+appVersion := "0.066"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -88,7 +88,6 @@ wrkDir := A_ScriptDir . "\"
 
 iniFile := wrkDir . "skatstube.ini"
 
-
 entriesFile1 := wrkDir . "skatstube1.txt"
 entriesFile2 := wrkDir . "skatstube2.txt"
 entriesFile3 := wrkDir . "skatstube3.txt"
@@ -118,6 +117,9 @@ linesInListMax := linesInListMaxDefault
 
 notepadPathDefault := "C:\Program Files\Notepad++\notepad++.exe"
 notepadpath := notepadPathDefault
+
+alarmScriptDefault := "alarm.hkb"
+alarmScript := alarmScriptDefault
 
 IniRead, menuHotkey, %iniFile%, hotkey, menuHotkey, %menuHotkeyDefault%
 Hotkey, %menuHotkey%, run
@@ -171,6 +173,8 @@ readIni(){
 	global linesInListMaxDefault
 	global clickhammerDelayDefault
 	global clickhammerDelay
+	global alarmScriptDefault
+	global alarmScript
 	
 	IniRead, chatfield1PosX, %iniFile%, coordinates, chatfield1PosX, 0
 	IniRead, chatfield1PosY, %iniFile%, coordinates, chatfield1PosY, 0
@@ -193,6 +197,8 @@ readIni(){
 	IniRead, linesInListMax, %iniFile%, config, linesInListMax, %linesInListMaxDefault%
 	
 	IniRead, clickhammerDelay, %iniFile%, config, clickhammerDelay, %clickhammerDelayDefault%
+	
+	IniRead, alarmScript, %iniFile%, config, alarmScript, %alarmScriptDefault%
 }
 ;****************************** registerWindow ******************************
 registerWindow(){
@@ -367,7 +373,7 @@ mainWindow(hide := false) {
 		Gui, guiMain:Show, Autosize
 	}
 	
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	
 	GuiControl, Font, LV1
 	
@@ -393,6 +399,20 @@ showMessageSkatStube(hk1, hk2){
 	return
 }
 
+;-------------------------- removeMessageSkatStube --------------------------
+removeMessageSkatStube(){
+	global menuHotkey
+
+	SB_SetParts(120,580)
+	SB_SetText(" " . "Hotkey: " . hotkeyToText(menuHotkey) , 1, 1)
+
+	SB_SetText(" ", 2, 1)
+	
+	memory := "[" . GetProcessMemoryUsage(DllCall("GetCurrentProcessId")) . " MB]      "
+	SB_SetText("`t`t" . memory , 3, 2)
+
+	return
+}
 ;******************************** refreshGui ********************************
 refreshGui(){
 	global wrkDir
@@ -494,7 +514,7 @@ showWindowRefreshed(){
 	showWindow()
 	refreshGui()
 	
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	
 	return
 }
@@ -718,11 +738,11 @@ editTxtFile1() {
 	global isSelected
 	global entriesFile1
 
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile1
 	runWait %f%,,max
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	
 	showWindowRefreshed()
 	return
@@ -739,7 +759,7 @@ editTxtFile2() {
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile2
 	runWait %f%,,max
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	
 	showWindowRefreshed()
 	return
@@ -756,7 +776,7 @@ editTxtFile3() {
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile3
 	runWait %f%,,max
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 	
 	showWindowRefreshed()
 	return
@@ -771,7 +791,7 @@ editiniFile() {
 	f := notepadpath . " " . iniFile
 	showMessageSkatStube("", "Please close the editor to refresh the menu!")
 	runWait %f%,,max
-	showMessageSkatStube("", "")
+	removeMessageSkatStube()
 
 	showWindowRefreshed()
 
@@ -870,6 +890,7 @@ SelectSet3(){
 ;------------------------------ alarmIfChanged ------------------------------
 alarmIfChanged(){
 	global wrkDir
+	global alarmScript
 	
 	sampleTimeDelay := 4000
 		
@@ -890,7 +911,14 @@ alarmIfChanged(){
 		if (meanValueNew != meanValueInitial){
 			msg := "Alarm, da " . "[" .  meanValueNew . "]" . " != " . "[" . meanValueInitial . "]"
 			ToolTip, %msg%,,,9
-			SoundPlay, %wrkDir%alarm.mp3, 1
+			
+			if (FileExist(wrkDir . alarmScript)){
+				SoundPlay, %wrkDir%alarm.mp3
+				Run, %wrkDir%%alarmScript%
+				sleep,3000
+			} else {
+				SoundPlay, %wrkDir%alarm.mp3,1
+			}
 			break sampleLoop
 		} else {
 			if (getkeystate("Escape","P") == 1){

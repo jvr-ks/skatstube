@@ -62,11 +62,15 @@ optional:
 [skatstube1.txt](https://github.com/jvr-ks/skatstube/raw/master/skatstube1.txt)  
 [skatstube2.txt](https://github.com/jvr-ks/skatstube/raw/master/skatstube2.txt)  
 [skatstube3.txt](https://github.com/jvr-ks/skatstube/raw/master/skatstube3.txt)  
+[alarm.ahk](https://github.com/jvr-ks/skatstube/raw/master/alarm.ahk)  
+
 
 ##### Inhalts-alarm  
 Testet ein 10 x 10 Pixel grosses Feld unter dem Cursor.  
 Sobald sich der Inhalt ändert (Mittelwert der Farben)  
 wird ein Alarm ausgelöst (Datei: "alarm.mp3" wird abgespielt).  
+Falls eine Datei "alarm.ahk" existiert, wird sie zusätzlich ausgführt.  
+(Dazu ist ein installiertes Autohotkey erforderlich!)  
 
 
 Virus check siehe unten. 
@@ -96,6 +100,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Copyright (c) 2020 J. v. Roos  
   
 ##### Virus check at Virustotal 
-[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1624972925
+[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1624995674
 )  
 Use [CTRL] + Click to open in a new window! 
