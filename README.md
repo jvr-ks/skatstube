@@ -69,7 +69,7 @@ optional:
 Testet ein 10 x 10 Pixel grosses Feld unter dem Cursor.  
 Sobald sich der Inhalt ändert (Mittelwert der Farben)  
 wird ein Alarm ausgelöst (Datei: "alarm.mp3" wird abgespielt).  
-Falls eine Datei "alarm.ahk" existiert, wird sie zusätzlich ausgführt.  
+Falls eine Datei "alarm.ahk" existiert, wird sie zusätzlich ausgeführt.  
 (Dazu ist ein installiertes Autohotkey erforderlich!)  
 
 
