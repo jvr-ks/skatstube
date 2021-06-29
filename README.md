@@ -69,7 +69,8 @@ optional:
 Testet ein 10 x 10 Pixel grosses Feld unter dem Cursor.  
 Sobald sich der Inhalt ändert (Mittelwert der Farben)  
 wird ein Alarm ausgelöst (Datei: "alarm.mp3" wird abgespielt).  
-Falls eine Datei "alarm.ahk" existiert, wird sie zusätzlich ausgeführt.  
+Falls eine Datei "alarm.ahk" existiert (Datei in der Config-Datei definiert: "alarmScript" ),  
+wird sie zusätzlich ausgeführt.  
 (Dazu ist ein installiertes Autohotkey erforderlich!)  
 
 
@@ -100,6 +101,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Copyright (c) 2020 J. v. Roos  
   
 ##### Virus check at Virustotal 
-[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1624995674
+[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1624997991
 )  
 Use [CTRL] + Click to open in a new window! 
