@@ -1,11 +1,15 @@
 # Skatstube
-(german language)
+(Sorry, German language only)
 
 Einfache App zur Eingabe vordefinierter Textsätze im Chatfeld, z. B. bei der [Skatstube]( https://www.skatstube.de/).   
-Verwendet **[ ALT ] + [ g ]** als Hotkey. 
+Verwendet **[ ALT ] + [ g ]** als Hotkey.  
+  
+Weitere Funktionen:  
+* Clickhammer
+* Inhalts-Alarm
   
 #### Letzte Änderungen:
-* Inhalts-alarm
+* Inhalts-Alarm
 * "Select Set" aus Menü entfernt  
 
 * clickhammerDelayDefault in Config-Datei ("skatstube.ini")  
@@ -65,8 +69,8 @@ optional:
 [alarm.ahk](https://github.com/jvr-ks/skatstube/raw/master/alarm.ahk)  
 
 
-##### Inhalts-alarm  
-Testet ein 10 x 10 Pixel grosses Feld unter dem Cursor.  
+##### Inhalts-Alarm  
+Testet ein 10 x 10 Pixel großes Feld unter dem Cursor.  
 Sobald sich der Inhalt ändert (Mittelwert der Farben)  
 wird ein Alarm ausgelöst (Datei: "alarm.mp3" wird abgespielt).  
 Falls eine Datei "alarm.ahk" existiert (Datei in der Config-Datei definiert: "alarmScript" ),  
