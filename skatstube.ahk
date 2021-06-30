@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.068"
+appVersion := "0.069"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -391,44 +391,10 @@ mainWindow(hide := false) {
 		Gui, guiMain:Show, Autosize
 	}
 	
-	removeMessageSkatStube()
+	removeMessage()
 	
 	GuiControl, Font, LV1
 	
-	return
-}
-;--------------------------- showMessageSkatStube ---------------------------
-showMessageSkatStube(hk1, hk2){
-	global menuHotkey
-
-	SB_SetParts(120,580)
-	if (hk1 != ""){
-		SB_SetText(" " . hk1 , 1, 1)
-	} else {
-		SB_SetText(" " . "Hotkey: " . hotkeyToText(menuHotkey) , 1, 1)
-	}
-		
-	if (hk2 != "")
-		SB_SetText(" " . hk2 , 2, 1)
-	
-	memory := "[" . GetProcessMemoryUsage(DllCall("GetCurrentProcessId")) . " MB]      "
-	SB_SetText("`t`t" . memory , 3, 2)
-
-	return
-}
-
-;-------------------------- removeMessageSkatStube --------------------------
-removeMessageSkatStube(){
-	global menuHotkey
-
-	SB_SetParts(120,580)
-	SB_SetText(" " . "Hotkey: " . hotkeyToText(menuHotkey) , 1, 1)
-
-	SB_SetText(" ", 2, 1)
-	
-	memory := "[" . GetProcessMemoryUsage(DllCall("GetCurrentProcessId")) . " MB]      "
-	SB_SetText("`t`t" . memory , 3, 2)
-
 	return
 }
 ;******************************** refreshGui ********************************
@@ -532,7 +498,7 @@ showWindowRefreshed(){
 	showWindow()
 	refreshGui()
 	
-	removeMessageSkatStube()
+	removeMessage()
 	
 	return
 }
@@ -753,11 +719,11 @@ editTxtFile1() {
 	global isSelected
 	global entriesFile1
 
-	removeMessageSkatStube()
+	removeMessage()
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile1
 	runWait %f%,,max
-	removeMessageSkatStube()
+	removeMessage()
 	
 	showWindowRefreshed()
 	return
@@ -770,11 +736,11 @@ editTxtFile2() {
 	global isSelected
 	global entriesFile2
 
-	showMessageSkatStube("", "Bitte den Editor schliessen!")
+	showMessage("", "Bitte den Editor schliessen!")
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile2
 	runWait %f%,,max
-	removeMessageSkatStube()
+	removeMessage()
 	
 	showWindowRefreshed()
 	return
@@ -787,11 +753,11 @@ editTxtFile3() {
 	global isSelected
 	global entriesFile3
 	
-	showMessageSkatStube("", "Bitte den Editor schliessen!")
+	showMessage("", "Bitte den Editor schliessen!")
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, "C:\Program Files\Notepad++\notepad++.exe"
 	f := notepadpath . " " . entriesFile3
 	runWait %f%,,max
-	removeMessageSkatStube()
+	removeMessage()
 	
 	showWindowRefreshed()
 	return
@@ -802,11 +768,11 @@ editiniFile() {
 	global iniFile
 	global notepadpath
 	
-	showMessageSkatStube("", "Bitte den Editor schliessen!")
+	showMessage("", "Bitte den Editor schliessen!")
 	f := notepadpath . " " . iniFile
-	showMessageSkatStube("", "Please close the editor to refresh the menu!")
+	showMessage("", "Please close the editor to refresh the menu!")
 	runWait %f%,,max
-	removeMessageSkatStube()
+	removeMessage()
 
 	showWindowRefreshed()
 
@@ -937,7 +903,7 @@ alarmIfChanged(){
 		} else {
 			if (getkeystate("Escape","P") == 1){
 				msg := "Alarm beendet!"
-				showMessageSkatStube("", msg)
+				showMessage("", msg)
 				ToolTip, %msg%,,,9
 				showWindow()
 				break sampleLoop

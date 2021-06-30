@@ -101,6 +101,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Copyright (c) 2020 J. v. Roos  
   
 ##### Virus check at Virustotal 
-[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1625050670
+[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1625055135
 )  
 Use [CTRL] + Click to open in a new window! 
