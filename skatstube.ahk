@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.067"
+appVersion := "0.068"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -101,6 +101,9 @@ linesInListMax := linesInListMaxDefault
 menuHotkeyDefault := "!g"
 menuHotkey := menuHotkeyDefault
 
+exitHotkeyDefault := "+!g"
+exitHotkey := exitHotkeyDefault
+
 listWidthDefault := 800
 listWidth := listWidthDefault
 
@@ -121,11 +124,6 @@ notepadpath := notepadPathDefault
 alarmScriptDefault := "alarm.hkb"
 alarmScript := alarmScriptDefault
 
-IniRead, menuHotkey, %iniFile%, hotkey, menuHotkey, %menuHotkeyDefault%
-Hotkey, %menuHotkey%, run
-
-hotKeyText := hotkeyToText(menuHotkey)
-
 
 spacer := "------------------------------------"
 
@@ -142,11 +140,16 @@ if (hasParams == 1) {
 	iniFile := A_Args[1]
 }
 
+starthidden := true
+
 readIni()
 
-mainWindow(true)
+mainWindow(starthidden)
 
-tipTop("""" . app . """ gestartet, Hotkey ist " . hotKeyText . ", Config-file ist: " . iniFile)
+if (starthidden){
+	hktext := hotkeyToText(menuHotkey)
+	tipTopTime("Gestarted " . app . ", Hotkey ist: " . hktext, 4000)
+}
 
 return
 ;---------------------------------- readIni ----------------------------------
@@ -161,6 +164,8 @@ readIni(){
 	global iniFile
 	global menuHotkey
 	global menuHotkeyDefault
+	global exitHotkey
+	global exitHotkeyDefault
 	global notepadpath
 	global notepadpathDefault
 	global fontDefault
@@ -185,8 +190,21 @@ readIni(){
 	IniRead, chatfield3PosX, %iniFile%, coordinates, chatfield3PosX, 0
 	IniRead, chatfield3PosY, %iniFile%, coordinates, chatfield3PosY, 0
 	
-	IniRead, menuHotkey, %iniFile%, hotkey, menuHotkey, %menuHotkeyDefault%
-	Hotkey, %menuHotkey%, run
+	IniRead, menuHotkey, %iniFile%, hotkeys, menuhotkey , %menuhotkeyDefault%
+	if (InStr(menuHotkey, "off") > 0){
+		s := StrReplace(menuHotkey, "off" , "")
+		Hotkey, %s%, showCentered, off
+	} else {
+		Hotkey, %menuHotkey%, showCentered
+	}
+
+	IniRead, exitHotkey, %iniFile%, hotkeys, exithotkey , %exithotkeyDefault%
+	if (InStr(exitHotkey, "off") > 0){
+		s := StrReplace(exitHotkey, "off" , "")
+		Hotkey, %s%, exit, off
+	} else {
+		Hotkey, %exitHotkey%, exit
+	}
 	
 	IniRead, notepadpath, %iniFile%, notepad, notepadpath, %notepadpathDefault%
 	
@@ -561,8 +579,7 @@ doSendInput(index) {
 			MouseMove, chatfield3PosX, chatfield3PosY, 0
 			MouseClick, Left
 		}
-		s := menuEntriesArr[index]
-		pos := RegExMatch(s,"O)\[(.*?)\]", match)
+		pos := RegExMatch(menuEntriesArr[index],"O)\[(.*?)\]", match)
 
 		if (pos > 0){
 			entry := match.1
@@ -619,11 +636,11 @@ doSendInput(index) {
 			}
 
 		} else {
-			s := menuEntriesArr[index]
+			mEa := menuEntriesArr[index]
 
-			clipboard := s
+			clipboard := mEa
 			
-			if (SubStr(s, 0 , 1) != "_") {
+			if (SubStr(mEa, 0 , 1) != "_") {
 				Send, ^v{Enter}
 			} else {
 				Clipboard := StrReplace(Clipboard, "_")
@@ -635,8 +652,6 @@ doSendInput(index) {
 	case 8:
 		;*** Shift ***
 
-		s := menuEntriesArr[index]
-		
 		InputBox,inp,Edit command,,,,100,,,,,%s%
 		
 		if (ErrorLevel){
@@ -807,13 +822,12 @@ exit() {
 	ExitApp
 }
 ;************************************ run ************************************
-run(){
+showCentered(){
 	global iniFile
 
 	WinGetPos, winTopL_x, winTopL_y, width, height, A
 	winCenter_x := winTopL_x + width/2
 	MouseMove, winCenter_x - 500, 50, 0
-
 	
 	showWindowRefreshed()
 
