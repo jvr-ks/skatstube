@@ -11,10 +11,8 @@ Weitere Funktionen:
 #### Letzte Änderungen:
 * Inhalts-Alarm
 * "Select Set" aus Menü entfernt  
-
 * clickhammerDelayDefault in Config-Datei ("skatstube.ini")  
 Delay (Mikrosekunden) zwischen den Clicks  
-  
 * [timer60/5] oder [timer120/5]  
 Sendet:  
 Bitte 1 Minute Pause ...  
@@ -23,7 +21,6 @@ Pause (1 min), noch: 50 s
 Pause (1 min), noch: 45 s  
 Pause (1 min), noch: 40 s  
 ...  
-  
 * Es gibt jetzt 3 "Sets", jeweils mit einem eigenen Datensatz (in der Datei "skatstube1(2,3).txt"),  
 sowie eigenen Einfügekoordinaten: chatfield1(2,3)PosX und chatfield1(2,3)PosY  -> Config-Datei ("skatstube.ini")  
 (Menü: Koordinaten -> Eingabe-Koordinaten neu erfassen)  
@@ -31,11 +28,9 @@ sowie eigenen Einfügekoordinaten: chatfield1(2,3)PosX und chatfield1(2,3)PosY  
 Umschaltung per "Select Set" Tasten.  
 Bei Umschaltung wird zusätzlich der Hintergrund eingefärbt.  
   
-* [Umschalt]-Taste ([Shift]-Taste) statt [Strg]-Taste ([Ctrl]-Taste)
-  
 #### Beschreibung:
 **Das Menü wird erst durch betätigen der Hotkey-Tasten-Kombination angezeigt.**  
-(Nach dem Start läuft die App im Hintergrund!)  
+(Nach dem Start läuft die App immer im Hintergrund!)  
    
 Durch Auswahl eines Satzes im Menü per Klick, wird dieser in das Chatfeld eingetragen.  
   
@@ -45,7 +40,8 @@ Die Sätze werden in den Dateien "skatstube1(2,3).txt" (im gleichen Ordner) gesp
     
 Die Position des Chatfeldes wird einmalig Menü -> Koordinaten (3 Werte, abhängig von "Select set") neu erfasst,  
 und in der Config-Datei gespeichert.   
-**Dazu muss der Startordner beschreibbar sein!**   
+**Dazu muss der Startordner beschreibbar sein!**  
+Die Config-Datei kann als Startparameter angegeben werden, ohne Angabe wird "skatstube.ini" verwendet.  
   
 ##### Besonderheiten:  
 * Ein Unterstrich als letztes Zeichen verhindert das Abschicken/Eingabe des Satzes, sodass noch Anfügungen oder Änderungen durchgeführt werden können.   
