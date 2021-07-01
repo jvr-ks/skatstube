@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.070"
+appVersion := "0.072"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -290,8 +290,6 @@ mainWindow(hide := false) {
 	Menu, MainMenuEdit,Add,Datei "%entriesFile2%" mit Editor bearbeiten,editTxtFile2
 	Menu, MainMenuEdit,Add,Datei "%entriesFile3%" mit Editor bearbeiten,editTxtFile3
 	Menu, MainMenuEdit,Add,Config-Datei: "%iniFile%" with Editor bearbeiten,editiniFile
-	
-	Menu, MainMenuKoordinaten,Add,Eingabe-Koordinaten neu erfassen,getInputCoordinates
 
 	marker1 := " "
 	marker2 := " "
@@ -671,10 +669,19 @@ getInputCoordinates() {
 	global iniFile
 	global isSelected
 	
+	hideWindow()
+	
+	tooltip,<- Text-Position1, chatfield1PosX + 10, chatfield1PosY,1
+	tooltip,<- Text-Position2, chatfield2PosX + 10, chatfield2PosY,2
+	tooltip,<- Text-Position3, chatfield3PosX + 10, chatfield3PosY,3
+
+	setTimer,tipTopclose,3000
+	
 	if (isSelected == 1){
 		MouseMove, chatfield1PosX, chatfield1PosY, 0
 		showHint("Bitte den Cursor ueber das Eingabefeld 1 bewegen (innerhalb von 5 Sekunden), falls er sich nicht schon dort befindet!", 5000)
-		MouseGetPos , chatfield1PosX, chatfield1PosY
+		sleep, 5000
+		MouseGetPos, chatfield1PosX, chatfield1PosY
 		IniWrite, %chatfield1PosX%, %iniFile%, coordinates, chatfield1PosX
 		IniWrite, %chatfield1PosY%, %iniFile%, coordinates, chatfield1PosY
 		If ( !ErrorLevel ) {
@@ -682,10 +689,12 @@ getInputCoordinates() {
 		} else {
 			showHint("Fehler, Koordinaten konnten nicht gespeichert werden!", 2000)
 		}
+		sleep, 1000
 	} 
 	if (isSelected == 2){
 		MouseMove, chatfield2PosX, chatfield2PosY, 0
 		showHint("Bitte den Cursor ueber das Eingabefeld 2 bewegen (innerhalb von 5 Sekunden), falls er sich nicht schon dort befindet!", 5000)
+		sleep, 5000
 		MouseGetPos , chatfield2PosX, chatfield2PosY
 		IniWrite, %chatfield2PosX%, %iniFile%, coordinates, chatfield2PosX
 		IniWrite, %chatfield2PosY%, %iniFile%, coordinates, chatfield2PosY
@@ -698,6 +707,7 @@ getInputCoordinates() {
 	if (isSelected == 3){
 		MouseMove, chatfield3PosX, chatfield3PosY, 0
 		showHint("Bitte den Cursor ueber das Eingabefeld 3 bewegen (innerhalb von 5 Sekunden), falls er sich nicht schon dort befindet!", 5000)
+		sleep, 5000
 		MouseGetPos , chatfield3PosX, chatfield3PosY
 		IniWrite, %chatfield3PosX%, %iniFile%, coordinates, chatfield3PosX
 		IniWrite, %chatfield3PosY%, %iniFile%, coordinates, chatfield3PosY
@@ -707,7 +717,7 @@ getInputCoordinates() {
 			showHint("Fehler, Koordinaten konnten nicht gespeichert werden!", 2000)
 		}	
 	}
-	Menu, MainMenu, Show
+	showWindow()
 	
 	return
 }
@@ -811,6 +821,7 @@ clickhammerRun(){
 	hideWindow()
 	
 	showHint("Please position cursor within 5 sec! [Mousemove] to exit", 5000)
+	sleep, 5000
 	stopme := false
 	
 	Loop {
@@ -827,6 +838,7 @@ clickhammerRun(){
 			if (state != "D") {
 				Tooltip,<- Clickhammer stopped!,,,,,9
 				showHint("Mouse moved with no Shift, exit Clickhammer!", 3000)
+				sleep, 2000
 				;showHint(format("Mouse moved  deltaX: {:d} deltaY: {:d} ", oldPosX - newPosX, oldPosY - newPosY), 20000)
 				stopme := true
 				break
