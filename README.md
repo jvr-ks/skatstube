@@ -9,6 +9,8 @@ Weitere Funktionen:
 * Inhalts-Alarm
   
 #### Letzte Änderungen:
+* Koordinaten von "Screen-mode" in "Client-mode" geändert.   
+Dazu muss natürlich die Skatstube App temporär in den Hintergrund gebracht werden.  
 * Inhalts-Alarm
 * "Select Set" aus Menü entfernt  
 * clickhammerDelayDefault in Config-Datei ("skatstube.ini")  
@@ -101,6 +103,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 Copyright (c) 2020 J. v. Roos  
   
 ##### Virus check at Virustotal 
-[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1625179752
+[Check here](https://www.virustotal.com/gui/url/ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869/detection/u-ba1f78c8a3d1b808c93a09bba74e7ed7012c0b2d2e27aff7ab755e173fc17869-1625252112
 )  
 Use [CTRL] + Click to open in a new window! 

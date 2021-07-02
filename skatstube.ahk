@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.072"
+appVersion := "0.073"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -525,25 +525,30 @@ doSendInput(index) {
 	global isSelected
 	
 	MouseGetPos, oldPosX, oldPosY
+	
+	hideWindow()
+	
+	mspeed := 50
 		
 	ks := getKeyboardState()
 	switch ks
 	{	
 	case 0:
 		if (isSelected == 1){
-			MouseMove, chatfield1PosX, chatfield1PosY, 0
+			MouseMove, chatfield1PosX, chatfield1PosY, %mspeed%
 			MouseClick, Left
 		}
 
 		if (isSelected == 2){
-			MouseMove, chatfield2PosX, chatfield2PosY, 0
+			MouseMove, chatfield2PosX, chatfield2PosY, %mspeed%
 			MouseClick, Left
 		}
 		if (isSelected == 3){
-			MouseMove, chatfield3PosX, chatfield3PosY, 0
+			MouseMove, chatfield3PosX, chatfield3PosY, %mspeed%
 			MouseClick, Left
 		}
-		pos := RegExMatch(menuEntriesArr[index],"O)\[(.*?)\]", match)
+		s := menuEntriesArr[index]
+		pos := RegExMatch(s,"O)\[(.*?)\]", match) ; check if command
 
 		if (pos > 0){
 			entry := match.1
@@ -600,11 +605,10 @@ doSendInput(index) {
 			}
 
 		} else {
-			mEa := menuEntriesArr[index]
-
-			clipboard := mEa
+			s := menuEntriesArr[index]
+			clipboard := s
 			
-			if (SubStr(mEa, 0 , 1) != "_") {
+			if (SubStr(s, 0 , 1) != "_") {
 				Send, ^v{Enter}
 			} else {
 				Clipboard := StrReplace(Clipboard, "_")
@@ -653,6 +657,8 @@ doSendInput(index) {
 		}
 		showWindowRefreshed()
 	}
+	
+	showWindow()
 	
 	MouseMove, oldPosX, oldPosY, 0
 	
