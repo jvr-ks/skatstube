@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.074"
+appVersion := "0.075"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -558,7 +558,7 @@ doSendInput(index) {
 	
 	hideWindow()
 	
-	mspeed := 50
+	mspeed := 5
 		
 	ks := getKeyboardState()
 	switch ks
