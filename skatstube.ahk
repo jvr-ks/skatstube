@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.073"
+appVersion := "0.074"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -124,6 +124,7 @@ notepadpath := notepadPathDefault
 alarmScriptDefault := "alarm.hkb"
 alarmScript := alarmScriptDefault
 
+MarkInsertPoints := false
 
 spacer := "------------------------------------"
 
@@ -152,6 +153,192 @@ if (starthidden){
 }
 
 return
+;-------------------------------- mainWindow --------------------------------
+mainWindow(hide := false) {
+	global wrkDir
+	global appName
+	global app
+	global appVersion
+	global entriesFile1
+	global entriesFile2
+	global entriesFile3
+	global chatfield1PosX
+	global chatfield1PosY
+	global chatfield2PosX
+	global chatfield2PosY
+	global chatfield3PosX
+	global chatfield3PosY
+	global iniFile
+	global menuEntriesArr
+	global menuHotkey
+	global fontsize
+	global font
+	global listWidth
+	global linesInListMax
+	global LV1
+	global spacer
+	global isSelected
+	global msgDefault
+	global OwnPID
+	global MarkInsertPoints
+
+	msgDefault := "Open " . appName . " hotkey: " . hotkeyToText(menuHotkey ) . ", Edit entry: [Shift] + [Click]"
+	
+	xStart := 8
+	yStart := 3
+	deltaX := 100
+	deltaY := yStart + 22
+	xStart1 := xStart + deltaX
+	xStart2 := xStart1 + deltaX
+	xStart3 := xStart2 + deltaX
+
+	Menu, Tray, UseErrorLevel   ; This affects all menus, not just the tray.
+
+	Menu, MainMenu, DeleteAll
+	Menu, MainMenuEdit, DeleteAll
+	
+	Menu, MainMenuEdit,Add,Datei "%entriesFile1%" mit Editor bearbeiten,editTxtFile1
+	Menu, MainMenuEdit,Add,Datei "%entriesFile2%" mit Editor bearbeiten,editTxtFile2
+	Menu, MainMenuEdit,Add,Datei "%entriesFile3%" mit Editor bearbeiten,editTxtFile3
+	Menu, MainMenuEdit,Add,Config-Datei: "%iniFile%" with Editor bearbeiten,editiniFile
+
+	marker1 := " "
+	marker2 := " "
+	marker3 := " "
+	color := "White"
+	
+	switch isSelected
+	{
+		case 1:
+			color := "White"
+		case 2:
+			color := "Green"
+		case 3:
+			color := "Blue"
+	}
+	
+	Menu, MainMenu, NoDefault
+	Menu, MainMenu, Add,Inhalte bearbeiten,:MainMenuEdit
+	Menu, MainMenu, Add,Position erfassen,getInputCoordinates
+	Menu, MainMenu, Add,Clickhammer starten,clickhammerRun
+	Menu, MainMenu, Add,Inhalts-Alarm,alarmIfchanged
+	
+	Menu, MainMenu, Add,Kill %appName% App!,exit
+	
+	Gui, guiMain:New,+E0x08000000 +OwnDialogs +LastFound HwndhMain +dpiScale, %app%
+	Gui, guiMain:Font, s%fontsize%, %font%
+	
+	Gui, guiMain:Color, %color%
+	
+	Gui,guiMain:Add,button,gSelectSet1 x%xStart% y%yStart%,%marker1% Select Set &1
+	Gui,guiMain:Add,button,gSelectSet2 x%xStart1% y%yStart%,%marker2% Select Set &2
+	Gui,guiMain:Add,button,gSelectSet3 x%xStart2% y%yStart%,%marker3% Select Set &3
+
+	if (isSelected == 1){
+		menuEntriesArr := []
+		Loop, read, %entriesFile1%
+		{
+			if (A_LoopReadLine != "") {
+				s := A_LoopReadLine
+				if (A_LoopReadLine == "_spacer_")
+					s := spacer
+					
+				menuEntriesArr.push(s)
+			}
+		}
+	} 
+	if (isSelected == 2){
+		menuEntriesArr := []
+		Loop, read, %entriesFile2%
+		{
+			if (A_LoopReadLine != "") {
+				s := A_LoopReadLine
+				if (A_LoopReadLine = "_spacer_")
+					s := spacer
+					
+				menuEntriesArr.push(s)
+			}
+		}
+	}
+	
+	if (isSelected == 3){
+		menuEntriesArr := []
+		Loop, read, %entriesFile3%
+		{
+			if (A_LoopReadLine != "") {
+				s := A_LoopReadLine
+				if (A_LoopReadLine = "_spacer_")
+					s := spacer
+					
+				menuEntriesArr.push(s)
+			}
+		}
+	}
+	
+	Gui, guiMain:Add,Text,x%xStart3% yp+0,Position markieren
+	chk := MarkInsertPoints ? "checked" : ""
+	Gui, guiMain:Add,CheckBox,vMarkInsertPoints gmarkInsertPoint xp+120 yp+0 %chk%
+	
+	linesInList := Min(linesInListMax,menuEntriesArr.length())
+	
+	Gui, guiMain:Add, ListView, x%xStart% yp+%deltaY% r%linesInList% w%listWidth% gLVCommands vLV1 AltSubmit -Multi, |Text
+	
+	for index, element in menuEntriesArr
+	{
+		LV_Add("",index,element)
+	}
+	
+	LV_ModifyCol(1,"Auto Integer")
+	LV_ModifyCol(2,"Auto Text")
+	
+	Gui, guiMain:Add, StatusBar,,
+	
+	checkVersionFromGithub()
+	
+	Gui, guiMain:Menu, MainMenu	
+	
+	if (!hide){
+		setTimer,registerWindow,-500
+		setTimer,checkFocus,3000
+
+		Gui, guiMain:Show, Autosize
+	}
+	
+	removeMessage()
+	
+	GuiControl, Font, LV1
+	
+	return
+}
+
+;------------------------------ markInsertPoint ------------------------------
+markInsertPoint(){
+	global MarkInsertPoints
+	global isSelected
+	global chatfield1PosX
+	global chatfield1PosY
+	global chatfield2PosX
+	global chatfield2PosY
+	global chatfield3PosX
+	global chatfield3PosY
+
+	Gui, guiMain:Submit, nohide
+	
+	if (MarkInsertPoints){
+		if (isSelected == 1)
+			tooltip,<- Text-Position1, chatfield1PosX + 10, chatfield1PosY,8
+		
+		if (isSelected == 2)
+			tooltip,<- Text-Position2, chatfield2PosX + 10, chatfield2PosY,8
+		
+		if (isSelected == 3)
+			tooltip,<- Text-Position3, chatfield3PosX + 10, chatfield3PosY,8
+	} else {
+		tooltip,,,,8
+	}
+	
+	return
+}
 ;---------------------------------- readIni ----------------------------------
 readIni(){
 	global wrkDir
@@ -237,164 +424,7 @@ checkFocus(){
 	
 	return
 }
-;********************************* mainWindow *********************************
-mainWindow(hide := false) {
-	global wrkDir
-	global appName
-	global app
-	global appVersion
-	global entriesFile1
-	global entriesFile2
-	global entriesFile3
-	global chatfield1PosX
-	global chatfield1PosY
-	global chatfield2PosX
-	global chatfield2PosY
-	global chatfield3PosX
-	global chatfield3PosY
-	global iniFile
-	global menuEntriesArr
-	global menuHotkey
-	global fontsize
-	global font
-	global listWidth
-	global linesInListMax
-	global LV1
-	global spacer
-	global isSelected
-	global msgDefault
-	global OwnPID
 
-	msgDefault := "Open " . appName . " hotkey: " . hotkeyToText(menuHotkey ) . ", Edit entry: [Shift] + [Click]"
-	
-	tooltip,<- Text-Position1, chatfield1PosX + 10, chatfield1PosY,1
-	tooltip,<- Text-Position2, chatfield2PosX + 10, chatfield2PosY,2
-	tooltip,<- Text-Position3, chatfield3PosX + 10, chatfield3PosY,3
-
-	setTimer,tipTopclose,1000
-	sleep,1100
-
-	xStart := 8
-	yStart := 3
-	deltaX := 100
-	deltaY := yStart + 22
-	xStart1 := xStart + deltaX
-	xStart2 := xStart1 + deltaX
-
-	Menu, Tray, UseErrorLevel   ; This affects all menus, not just the tray.
-
-	Menu, MainMenu, DeleteAll
-	Menu, MainMenuEdit, DeleteAll
-	
-	Menu, MainMenuEdit,Add,Datei "%entriesFile1%" mit Editor bearbeiten,editTxtFile1
-	Menu, MainMenuEdit,Add,Datei "%entriesFile2%" mit Editor bearbeiten,editTxtFile2
-	Menu, MainMenuEdit,Add,Datei "%entriesFile3%" mit Editor bearbeiten,editTxtFile3
-	Menu, MainMenuEdit,Add,Config-Datei: "%iniFile%" with Editor bearbeiten,editiniFile
-
-	marker1 := " "
-	marker2 := " "
-	marker3 := " "
-	color := "White"
-	
-	switch isSelected
-	{
-		case 1:
-			color := "White"
-		case 2:
-			color := "Green"
-		case 3:
-			color := "Blue"
-	}
-	
-	Menu, MainMenu, NoDefault
-	Menu, MainMenu, Add,Inhalte bearbeiten,:MainMenuEdit
-	Menu, MainMenu, Add,Koordinaten erfassen,getInputCoordinates
-	Menu, MainMenu, Add,Clickhammer starten,clickhammerRun
-	Menu, MainMenu, Add,Inhalts-Alarm,alarmIfchanged
-	
-	Menu, MainMenu, Add,Kill %appName% App!,exit
-	
-	Gui, guiMain:New,+E0x08000000 +OwnDialogs +LastFound HwndhMain +dpiScale, %app%
-	Gui, guiMain:Font, s%fontsize%, %font%
-	
-	Gui, guiMain:Color, %color%
-	
-	Gui,guiMain:Add,button,GSelectSet1 x%xStart% y%yStart%,%marker1% Select Set &1
-	Gui,guiMain:Add,button,GSelectSet2 x%xStart1% y%yStart%,%marker2% Select Set &2
-	Gui,guiMain:Add,button,GSelectSet3 x%xStart2% y%yStart%,%marker3% Select Set &3
-
-	if (isSelected == 1){
-		menuEntriesArr := []
-		Loop, read, %entriesFile1%
-		{
-			if (A_LoopReadLine != "") {
-				s := A_LoopReadLine
-				if (A_LoopReadLine == "_spacer_")
-					s := spacer
-					
-				menuEntriesArr.push(s)
-			}
-		}
-	} 
-	if (isSelected == 2){
-		menuEntriesArr := []
-		Loop, read, %entriesFile2%
-		{
-			if (A_LoopReadLine != "") {
-				s := A_LoopReadLine
-				if (A_LoopReadLine = "_spacer_")
-					s := spacer
-					
-				menuEntriesArr.push(s)
-			}
-		}
-	}
-	
-	if (isSelected == 3){
-		menuEntriesArr := []
-		Loop, read, %entriesFile3%
-		{
-			if (A_LoopReadLine != "") {
-				s := A_LoopReadLine
-				if (A_LoopReadLine = "_spacer_")
-					s := spacer
-					
-				menuEntriesArr.push(s)
-			}
-		}
-	}
-	
-	linesInList := Min(linesInListMax,menuEntriesArr.length())
-	
-	Gui, Add, ListView, x%xStart% yp+%deltaY% r%linesInList% w%listWidth% gLVCommands vLV1 AltSubmit -Multi, |Text
-	
-	for index, element in menuEntriesArr
-	{
-		LV_Add("",index,element)
-	}
-	
-	LV_ModifyCol(1,"Auto Integer")
-	LV_ModifyCol(2,"Auto Text")
-	
-	Gui, guiMain:Add, StatusBar,,
-	
-	checkVersionFromGithub()
-	
-	Gui, guiMain:Menu, MainMenu	
-	
-	if (!hide){
-		setTimer,registerWindow,-500
-		setTimer,checkFocus,3000
-
-		Gui, guiMain:Show, Autosize
-	}
-	
-	removeMessage()
-	
-	GuiControl, Font, LV1
-	
-	return
-}
 ;******************************** refreshGui ********************************
 refreshGui(){
 	global wrkDir
@@ -677,10 +707,6 @@ getInputCoordinates() {
 	
 	hideWindow()
 	
-	tooltip,<- Text-Position1, chatfield1PosX + 10, chatfield1PosY,1
-	tooltip,<- Text-Position2, chatfield2PosX + 10, chatfield2PosY,2
-	tooltip,<- Text-Position3, chatfield3PosX + 10, chatfield3PosY,3
-
 	setTimer,tipTopclose,3000
 	
 	if (isSelected == 1){
@@ -691,9 +717,9 @@ getInputCoordinates() {
 		IniWrite, %chatfield1PosX%, %iniFile%, coordinates, chatfield1PosX
 		IniWrite, %chatfield1PosY%, %iniFile%, coordinates, chatfield1PosY
 		If ( !ErrorLevel ) {
-			showHint("Koordinaten gespeichert!", 2000)
+			showHint("Position gespeichert!", 2000)
 		} else {
-			showHint("Fehler, Koordinaten konnten nicht gespeichert werden!", 2000)
+			showHint("Fehler, Position konnte nicht gespeichert werden!", 2000)
 		}
 		sleep, 1000
 	} 
@@ -705,9 +731,9 @@ getInputCoordinates() {
 		IniWrite, %chatfield2PosX%, %iniFile%, coordinates, chatfield2PosX
 		IniWrite, %chatfield2PosY%, %iniFile%, coordinates, chatfield2PosY
 		If ( !ErrorLevel ) {
-			showHint("Koordinaten gespeichert!", 2000)
+			showHint("Position gespeichert!", 2000)
 		} else {
-			showHint("Fehler, Koordinaten konnten nicht gespeichert werden!", 2000)
+			showHint("Fehler, Position konnte nicht gespeichert werden!", 2000)
 		}	
 	}
 	if (isSelected == 3){
@@ -718,9 +744,9 @@ getInputCoordinates() {
 		IniWrite, %chatfield3PosX%, %iniFile%, coordinates, chatfield3PosX
 		IniWrite, %chatfield3PosY%, %iniFile%, coordinates, chatfield3PosY
 		If ( !ErrorLevel ) {
-			showHint("Koordinaten gespeichert!", 2000)
+			showHint("Position gespeichert!", 2000)
 		} else {
-			showHint("Fehler, Koordinaten konnten nicht gespeichert werden!", 2000)
+			showHint("Fehler, Position konnte nicht gespeichert werden!", 2000)
 		}	
 	}
 	showWindow()
@@ -866,6 +892,8 @@ SelectSet1(){
 		
 	isSelected :=  1
 	showWindowRefreshed()
+	markInsertPoint()
+	
 	return
 }
 ;******************************** SelectSet2 ********************************
@@ -874,6 +902,8 @@ SelectSet2(){
 		
 	isSelected :=  2
 	showWindowRefreshed()
+	markInsertPoint()
+	
 	return
 }
 ;******************************** SelectSet3 ********************************
@@ -882,6 +912,8 @@ SelectSet3(){
 		
 	isSelected :=  3
 	showWindowRefreshed()
+	markInsertPoint()
+	
 	return
 }
 
