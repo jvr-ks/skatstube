@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.075"
+appVersion := "0.076"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -156,6 +156,7 @@ return
 ;-------------------------------- mainWindow --------------------------------
 mainWindow(hide := false) {
 	global wrkDir
+	global hwndHMainHwnd
 	global appName
 	global app
 	global appVersion
@@ -225,7 +226,7 @@ mainWindow(hide := false) {
 	
 	Menu, MainMenu, Add,Kill %appName% App!,exit
 	
-	Gui, guiMain:New,+E0x08000000 +OwnDialogs +LastFound HwndhMain +dpiScale, %app%
+	Gui, guiMain:New,+E0x08000000 +OwnDialogs +LastFound hwndHMainHwnd +dpiScale, %app%
 	Gui, guiMain:Font, s%fontsize%, %font%
 	
 	Gui, guiMain:Color, %color%
