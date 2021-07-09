@@ -56,7 +56,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 wrkDir := A_ScriptDir . "\"
 
 appName := "Skatstube"
-appVersion := "0.077"
+appVersion := "0.078"
 app := appName . " " . appVersion
 
 CoordMode, Mouse, Client
@@ -616,7 +616,7 @@ doSendInput(index) {
 						
 					Loop, 23 
 					{
-						clipboard := "Pause (1 min), noch: "  . 120 - (5 * A_Index) . " s"
+						clipboard := "Pause (2 min), noch: "  . 120 - (5 * A_Index) . " s"
 						Send, ^v{Enter}
 						sleep,5000
 						if (getkeystate("Escape","P")=1)
